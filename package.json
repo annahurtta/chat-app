@@ -1,7 +1,7 @@
 {
-  "name": "char",
-  "version": "0.0.1",
-  "description": "My frst chat app",
+  "name": "chat",
+  "version": "",
+  "description": "",
   "dependencies": {
     "bootstrap": "^3.3.7",
     "express": "^4.14.0",
