@@ -5,10 +5,7 @@ var chatApp = {
     socket.on('connect', function(){
       // call the server-side function 'adduser' and send one parameter (value of prompt)
       socket.emit('adduser', prompt("What's your name?"));
-
-      socket.on('userlist', function(usernames){
-        console.log(usernames[username])
-      })
+     
     });
   },
   sendMessage: function(){
@@ -56,6 +53,7 @@ var chatApp = {
       $('#data').focus();
       // tell server to execute 'sendchat' and send along one parameter
       socket.emit('sendchat', message);
+      chatApp.scrollChat();
     });
     // when the client hits ENTER on their keyboard
     $('#data').keypress(function(e) {
@@ -64,6 +62,7 @@ var chatApp = {
         $(this).blur();
         $('#datasend').focus().click();
         $('#data').focus();
+        chatApp.scrollChat();
       }
     });
     
@@ -75,6 +74,22 @@ var chatApp = {
     $('.closebtn').click(function(){
       $('#mySidenav').css('width', '0');
     });
+  },
+  scrollChat: function(){
+    var windowHeight = $(window).height();
+    var NavFooterHeight = ($('.navigation').height()) + ($('.input_container').height());
+    var chatHeight = windowHeight - NavFooterHeight - 100;
+    var conversationHeight = $('#conversation').css('height', chatHeight + 'px');
+    $('.chat_container').css('height', chatHeight + 'px');
+$("#conversation").animate({ scrollTop: $('#conversation')[0].scrollHeight}, 1000);
+
+    if(conversationHeight >= chatHeight){
+      console.log(conversationHeight, $('#conversation').scrollHeight)
+      console.log("nyt on korkee")
+      $("#conversation").animate({ scrollTop: $('#conversation')[0].scrollHeight}, 1000);
+    }
+
+    
   },
   init: function(){
     chatApp.conncectToChat();

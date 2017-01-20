@@ -2,18 +2,49 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="stylesheet" type="text/css" href="public/styles/styles.css">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <div class="messages_container">
-      <ul class="messages"></ul>
+    <!-- Add username -->
+     <!-- Add username -->
+    
+    <div class="container">
+      <!-- <div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow-y:scroll;"> -->
+      <div class="row navigation">
+        <div id="mySidenav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn">&times;</a>
+          <div id="rooms"></div>
+        </div>
+        <div class="col-sm-12 open_nav"><h3>&#9776;Rooms</h3></div>
+      </div>
+      <!-- Use any element to open the sidenav -->
+      
+      <div class="row chat_container">
+        <div class="col-sm-12" id="conversation">
+        </div>
+      </div>
+      <div class="clear_both"></div>
+      <div class="row">
+        <div class="col-sm-12 input_container">
+          <div class="input-group">
+              <input type="text" autocomplete="off" id="data" class="form-control">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" id="datasend" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
     </div>
-    <form id="send_messages">
-      <input id="msg" autocomplete="off" />
-      <button>Send</button>
-    </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+      <!-- <div style="float:left;width:300px;height:250px;overflow-y:scroll;padding:10px;"> -->
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="/script.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/tether/1.3.1/js/tether.min.js"></script>
+    <script src="public/js/bundle.js"></script>
+    <script src="public/js/script.js"></script>
     
   </body>
 </html>
