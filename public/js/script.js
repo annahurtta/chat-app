@@ -16,6 +16,7 @@ var chatApp = {
     // listener, whenever the server emits 'updatechat', this updates the chat body
     socket.on('updatechat', function (username, data) {
       $('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
+      chatApp.scrollChat();
     });
   },
   changeRoom: function() {
@@ -76,10 +77,9 @@ var chatApp = {
   },
   scrollChat: function(){
     var conversationHeight = $('#conversation').height();
-    console.log($('#conversation').offset().top)
     if(conversationHeight >= chatApp.chatHeight){
       console.log("nyt on korkea")
-      $('.chat_container').animate({ scrollTop: conversationHeight}, 1000);
+      $('.chat_container').animate({ scrollTop: conversationHeight});
       console.log($('#conversation').offset().top)
     }
   },
