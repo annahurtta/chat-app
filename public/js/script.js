@@ -5,7 +5,11 @@ var chatApp = {
     socket.on('connect', function(){
       // call the server-side function 'adduser' and send one parameter (value of prompt)
       socket.emit('adduser', prompt("What's your name?"));
-     
+      var windowHeight = $(window).height();
+      var NavFooterHeight = ($('.navigation').height()) + ($('.footer').height());
+      chatApp.chatHeight = windowHeight - NavFooterHeight;
+      $('.chat_container').css('height', chatApp.chatHeight + 'px');
+      $('#data').focus();
     });
   },
   sendMessage: function(){
@@ -28,7 +32,6 @@ var chatApp = {
         else {
           $('<a class="room" data-room="' + chatApp.value + '">' + chatApp.value + '</a>').appendTo(available_rooms);
         }
-        
       });
       chatApp.goToRoom(chatApp.value);
     });
@@ -36,12 +39,9 @@ var chatApp = {
   },
   goToRoom:function(){
     $('.room').click(function(room){
-      console.log("hä")
       var pickedRoom = $(this).data('room');
-      console.log(pickedRoom)
       socket.emit('switchRoom', pickedRoom);
       $('#mySidenav').css('width', '0');
-
     });
   },
   initEvents: function(){
@@ -65,31 +65,23 @@ var chatApp = {
         chatApp.scrollChat();
       }
     });
-    
-    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+
+    //Side nav
     $('.open_nav').click(function(){
       $('#mySidenav').css('width', '250px');
     });
-
     $('.closebtn').click(function(){
       $('#mySidenav').css('width', '0');
     });
   },
   scrollChat: function(){
-    var windowHeight = $(window).height();
-    var NavFooterHeight = ($('.navigation').height()) + ($('.input_container').height());
-    var chatHeight = windowHeight - NavFooterHeight - 100;
-    var conversationHeight = $('#conversation').css('height', chatHeight + 'px');
-    $('.chat_container').css('height', chatHeight + 'px');
-$("#conversation").animate({ scrollTop: $('#conversation')[0].scrollHeight}, 1000);
-
-    if(conversationHeight >= chatHeight){
-      console.log(conversationHeight, $('#conversation').scrollHeight)
-      console.log("nyt on korkee")
-      $("#conversation").animate({ scrollTop: $('#conversation')[0].scrollHeight}, 1000);
+    var conversationHeight = $('#conversation').height();
+    console.log($('#conversation').offset().top)
+    if(conversationHeight >= chatApp.chatHeight){
+      console.log("nyt on korkea")
+      $('.chat_container').animate({ scrollTop: conversationHeight}, 1000);
+      console.log($('#conversation').offset().top)
     }
-
-    
   },
   init: function(){
     chatApp.conncectToChat();
