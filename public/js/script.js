@@ -26,7 +26,6 @@ var chatApp = {
         }
       }
     });
-
   },
   initChatContainer: function(){
     $('.login_container').remove();
@@ -57,7 +56,7 @@ var chatApp = {
     });
   },
   changeRoom: function() {
-     // listener, whenever the server emits 'updaterooms', this updates the room the client is in
+    //list rooms
     socket.on('updaterooms', function(rooms, current_room) {
       $('#rooms').empty();
       var current_room_container = $('<div class="current_room"></div>').appendTo('#rooms');
@@ -114,7 +113,7 @@ var chatApp = {
   scrollChat: function(){
     var conversationHeight = $('#conversation').height();
     if(conversationHeight >= chatApp.chatHeight){
-      $('.chat_container, body').animate({ scrollTop: conversationHeight});
+      $('.chat_container').animate({ scrollTop: conversationHeight});
     }
   },
   init: function(){
