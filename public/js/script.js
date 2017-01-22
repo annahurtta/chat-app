@@ -51,7 +51,6 @@ var chatApp = {
       if(ready) {
         $('<h4>People at Chatti-Appi</h4>').appendTo($("#people"));;
         $.each(usernames, function(clientid, username) {
-          console.log(usernames)
           $('#people').append("<p>" + username + "</p>");
         });
       }
@@ -115,10 +114,7 @@ var chatApp = {
   scrollChat: function(){
     var conversationHeight = $('#conversation').height();
     if(conversationHeight >= chatApp.chatHeight){
-      $('.chat_container').css('overflow-y', 'hidden');
       $('.chat_container, body').animate({ scrollTop: conversationHeight});
-      $('.chat_container').css('overflow-y', 'auto');
-      console.log($('#conversation').offset().top)
     }
   },
   init: function(){

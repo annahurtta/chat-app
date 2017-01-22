@@ -30,7 +30,7 @@ io.sockets.on('connection', function (socket){
     socket.emit('updatechat', 'SERVER', 'You have connected');
     io.sockets.emit('updateusers', usernames)
     //kerrotaan huoneessa oleville uudesta liittymisestä
-    socket.broadcast.to('room1').emit('updatechat', 'SERVER', username + 'has connected');
+    socket.broadcast.to('room1').emit('updatechat', 'SERVER', username + ' has connected');
     socket.emit('updaterooms', rooms, 'room1'); 
     });
   
