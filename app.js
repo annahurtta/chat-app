@@ -28,6 +28,7 @@ io.sockets.on('connection', function (socket){
     socket.join('room1');
     //kerrotaan käyttäjälle liittymisestä
     socket.emit('updatechat', 'SERVER', 'You have connected');
+    io.sockets.emit('updateusers', usernames)
     //kerrotaan huoneessa oleville uudesta liittymisestä
     socket.broadcast.to('room1').emit('updatechat', 'SERVER', username + 'has connected');
     socket.emit('updaterooms', rooms, 'room1'); 
@@ -41,7 +42,6 @@ io.sockets.on('connection', function (socket){
   //kun käyttäjä vaihtaa huonetta
   socket.on('switchRoom', function(newroom){
     socket.leave(socket.room);
-    console.log(newroom)
     socket.join(newroom);
     //kerro käyttäjälle liittymisestä
     socket.emit('updatechat', 'SERVER', 'You have connected to ' + newroom);

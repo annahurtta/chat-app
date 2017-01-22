@@ -1,22 +1,60 @@
 var socket = io();
 var chatApp = {
   conncectToChat: function(){
-    // on connection to server, ask for user's name with an anonymous callback
-    socket.on('connect', function(){
-      // call the server-side function 'adduser' and send one parameter (value of prompt)
-      socket.emit('adduser', prompt("What's your name?"));
-      var windowHeight = $(window).height();
-      var NavFooterHeight = ($('.navigation').height()) + ($('.footer').height());
-      chatApp.chatHeight = windowHeight - NavFooterHeight;
+    $('#join').click(function(){
+      var username = $('#name').val();
+      if (username != '') {
+        socket.emit('adduser', username);
+        ready = true;
+        chatApp.initChatContainer();
+        chatApp.updateUsernames();
+      }else{
+        $('<div class="col-md-6 col-md-offset-3"><h3>Username misssing</h3></div>').appendTo($('.login_container'));
+      }
+    });
+
+    $('#name').keypress(function(e){
+      if(e.which === 13) {
+        var username = $('#name').val();
+        if (username != '') {
+          socket.emit('adduser', username);
+          ready = true;
+          chatApp.initChatContainer();
+          chatApp.updateUsernames();
+        }else{
+          $('<div class="col-md-6 col-md-offset-3"><h3>Username misssing</h3></div>').appendTo($('.login_container'));
+        }
+      }
+    });
+
+  },
+  initChatContainer: function(){
+    $('.login_container').remove();
+    $('.chat_container').show();
+    $('#data').focus();
+    $('.footer').show();
+
+    var windowHeight = $(window).height();
+    var NavFooterHeight = ($('.navigation').height()) + ($('.footer').height());
+    chatApp.chatHeight = windowHeight - NavFooterHeight;
       $('.chat_container').css('height', chatApp.chatHeight + 'px');
-      $('#data').focus();
+  },
+  printMessage: function(){
+    socket.on('updatechat', function (username, data) {
+      $('#conversation').append('<p><span class="username">'+ username + ':</span> ' + data + '</p>');
+      chatApp.scrollChat();
     });
   },
-  sendMessage: function(){
-    // listener, whenever the server emits 'updatechat', this updates the chat body
-    socket.on('updatechat', function (username, data) {
-      $('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
-      chatApp.scrollChat();
+  updateUsernames: function(){
+    socket.on('updateusers', function(usernames){
+      $('#people').empty();
+      if(ready) {
+        $('<h4>People at Chatti-Appi</h4>').appendTo($("#people"));;
+        $.each(usernames, function(clientid, username) {
+          console.log(usernames)
+          $('#people').append("<p>" + username + "</p>");
+        });
+      }
     });
   },
   changeRoom: function() {
@@ -46,19 +84,18 @@ var chatApp = {
     });
   },
   initEvents: function(){
-    // when the client clicks SEND
+    //if click send
     $('#datasend').click( function(e) {
       e.preventDefault();
       var message = $('#data').val();
       $('#data').val('');
       $('#data').focus();
-      // tell server to execute 'sendchat' and send along one parameter
       socket.emit('sendchat', message);
       chatApp.scrollChat();
     });
-    // when the client hits ENTER on their keyboard
+    //if hit enter
     $('#data').keypress(function(e) {
-      if(e.which == 13) {
+      if(e.which === 13) {
         e.preventDefault();
         $(this).blur();
         $('#datasend').focus().click();
@@ -78,14 +115,15 @@ var chatApp = {
   scrollChat: function(){
     var conversationHeight = $('#conversation').height();
     if(conversationHeight >= chatApp.chatHeight){
-      console.log("nyt on korkea")
-      $('.chat_container').animate({ scrollTop: conversationHeight});
+      $('.chat_container').css('overflow-y', 'hidden');
+      $('.chat_container, body').animate({ scrollTop: conversationHeight});
+      $('.chat_container').css('overflow-y', 'auto');
       console.log($('#conversation').offset().top)
     }
   },
   init: function(){
     chatApp.conncectToChat();
-    chatApp.sendMessage();
+    chatApp.printMessage();
     chatApp.changeRoom();
     chatApp.initEvents();
   }
